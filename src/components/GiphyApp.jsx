@@ -21,43 +21,51 @@ const GiphyApp = () => {
 
   // API call
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async ()  => {
+        try {
+            const apiResults = await axios("https://api.giphy.com/v1/gifs/trending", {
+            params: {
+                api_key: "oOkjGhZtAyw9T2GXhYLk4SMKTqMJOh6a"
+            }
+            });
 
-      try {
-        const apiResults = await axios("https://api.giphy.com/v1/gifs/trending", {
-          params: {
-            api_key: "oOkjGhZtAyw9T2GXhYLk4SMKTqMJOh6a"
-          }
-        });
+            setData(apiResults.data.data.sort(() => 0.5 - Math.random()));
 
-        console.log(apiResults);
-        setData(apiResults.data.data);
-      } catch (err) {
-      }
-
+        } catch (err) {
+        }
     };
 
     fetchData();
+
+    const timer = setInterval(() => {
+        fetchData();
+    }, 5000);
+    return () => {
+        clearInterval(timer);
+    };
+
+    
   }, []);
 
   // Render Images
   const renderImages = () => {
-    return currentItems.map(api => {
-      return (
-        <Col xs={12} md={6} lg={4} key={api.id} className="mb-3">
-            <Card className="h-100">
-                <div className="embed-responsive embed-responsive-16by9">
-                    <img src={api.images.fixed_height.url}  className="card-img-top embed-responsive-item" alt={api.title} />
-                </div>
-                
-                <div className="card-body">
-                    <h5 className="card-title">{api.title}</h5>
-                </div>
-            </Card>
-        </Col>
-      );
+    return currentItems.map(responseFinal => {
+        return (
+            <Col xs={12} md={6} lg={4} key={responseFinal.id} className="mb-3">
+                <Card className="h-100">
+                    <div className="embed-responsive embed-responsive-16by9">
+                        <img src={responseFinal.images.fixed_height.url}  className="card-img-top embed-responsive-item" alt={responseFinal.title} />
+                    </div>
+                    
+                    <div className="card-body">
+                        <h5 className="card-title">{responseFinal.title}</h5>
+                    </div>
+                </Card>
+            </Col>
+        );
     });
   };
+
 
   // Prev
   const goToPrevPage = () => {
