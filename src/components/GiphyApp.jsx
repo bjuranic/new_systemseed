@@ -28,9 +28,7 @@ const GiphyApp = () => {
                 api_key: "oOkjGhZtAyw9T2GXhYLk4SMKTqMJOh6a"
             }
             });
-
             setData(apiResults.data.data.sort(() => 0.5 - Math.random()));
-
         } catch (err) {
         }
     };
